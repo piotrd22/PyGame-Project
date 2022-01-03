@@ -12,36 +12,66 @@ ekran = pygame.display.set_mode((800,600))  # wielkosc ekranu (screen size)
 pygame.display.set_caption('TOM i JERRY by Piotr Damrych')  #nazwa (name)
 fps = 60  #frames per second - 60 is the most common
 
+
+ammu_speed = 6
+ammu_number = 50
+hits = pygame.USEREVENT #it represents custom user event
+
 TOM = pygame.image.load(os.path.join('Dodatki','Tom.png'))
 TOM_resize = pygame.transform.scale(TOM, (50,50))
 JERRY = pygame.image.load(os.path.join('Dodatki','Jerry.png'))
 JERRY_resize = pygame.transform.scale(JERRY, (50,50))
 
-def TOM_movement(tomek):
-    klucz = pygame.key.get_pressed()
-    if klucz[pygame.K_d] or klucz[pygame.K_RIGHT]:
-        tomek.x += 1
-    if klucz[pygame.K_a] or klucz[pygame.K_LEFT]:
-        tomek.x -= 1
-    if klucz[pygame.K_w] or klucz[pygame.K_UP]:
-        tomek.y -= 1
-    if klucz[pygame.K_s] or klucz[pygame.K_DOWN]:
-        tomek.y += 1
+def shots(ammu,tomek, jarek):
+    for i in ammu:
+        i.x += ammu_speed
+        if jarek.colliderect(i):
+            pygame.event.post(pygame.event.Event(hits))
+            ammu.remove(i)
 
+
+def TOM_movement(tomek):
+
+    SPEED = 3
+    klucz = pygame.key.get_pressed()
+
+    if klucz[pygame.K_d] and tomek.x + SPEED + 50 < 800:
+        tomek.x += SPEED
+    if klucz[pygame.K_RIGHT] and tomek.x + SPEED + 50 < 800:
+        tomek.x += SPEED
+    if klucz[pygame.K_a] and tomek.x - SPEED > 0:
+        tomek.x -= SPEED
+    if klucz[pygame.K_LEFT] and tomek.x - SPEED > 0:
+        tomek.x -= SPEED
+    if klucz[pygame.K_w] and tomek.y - SPEED > 0:
+        tomek.y -= SPEED
+    if klucz[pygame.K_UP] and tomek.y - SPEED > 0:
+        tomek.y -= SPEED
+    if klucz[pygame.K_s] and tomek.y + SPEED + 50 < 600:
+        tomek.y += SPEED
+    if klucz[pygame.K_DOWN] and tomek.y + SPEED + 50 < 600:
+        tomek.y += SPEED
 
 #draw our window and rectangle
-def rysowanie_ekr(tomek,jarek):
+def rysowanie_ekr(tomek,jarek, ammu):
     ekran.fill((255, 255, 255))
     ekran.blit(TOM_resize, (tomek.x,tomek.y))   #blit is gonna draw our images on the screen
     ekran.blit(JERRY_resize,(jarek.x,jarek.y))
+
+    for shot in ammu:
+        pygame.draw.rect(ekran, (100,100,100), shot)
+
     pygame.display.update()
+
 
 #main loop
 def main():
 
+    ammmu = []
+
     direction=1
-    speed_x=2
-    speed_y=1
+    speed_x = 2
+    speed_y = 1
 
     tomek = pygame.Rect(100,300,50,50)
     jarek = pygame.Rect(100,100,50,50)
@@ -57,7 +87,12 @@ def main():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 a = False
 
-        rysowanie_ekr(tomek,jarek)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and len(ammmu) < ammu_number:
+                    shot = pygame.Rect(tomek.x + tomek.width, tomek.y + tomek.height//2 - 5 , 8, 4)
+                    ammmu.append(shot)
+
+        rysowanie_ekr(tomek,jarek,ammmu)
 
         #JERRY MOVEMENT (when it was a func it didnt work so yeah...)
         if jarek.left <= 20 or jarek.right >= 780:
@@ -83,6 +118,9 @@ def main():
         #END OF JERRY MOVEMENT
 
         TOM_movement(tomek)
+
+        shots(ammmu, tomek, jarek)
+
 
 
 if __name__  == '__main__':
