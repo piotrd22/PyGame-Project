@@ -9,8 +9,8 @@ pygame.display.set_caption('TOM i JERRY by Piotr Damrych')  #nazwa (name)
 fps = 60  #frames per second - 60 is the most common
 screen_color = (255,255,255)
 
-
-czcionka = pygame.font.SysFont('arial', 30)
+czcionka2 = pygame.font.SysFont('helvetica',15)
+czcionka = pygame.font.SysFont('helvetica', 30)
 kolor_czcionki = (255,255,255)
 
 ammu_speed = 6
@@ -26,7 +26,15 @@ JERRY_resize = pygame.transform.scale(JERRY, (50,50))
 background = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki', 'Backgorund.png')), (800,600))
 
 def shots(ammu,tomek, jarek):
+    klucz = pygame.key.get_pressed()
     for i in ammu:
+        # if klucz[pygame.K_UP] or klucz[pygame.K_w]:
+        #     i.y -= ammu_speed
+        # if klucz[pygame.K_DOWN] or klucz[pygame.K_s]:
+        #     i.y += ammu_speed
+        # if klucz[pygame.K_LEFT] or klucz[pygame.K_a]:
+        #     i.x -= ammu_speed
+        # else:
         i.x += ammu_speed
         if jarek.colliderect(i):
             pygame.event.post(pygame.event.Event(hits))
@@ -62,6 +70,26 @@ def TOM_movement(tomek):
     if klucz[pygame.K_DOWN] and tomek.y + SPEED + 50 < 600:
         tomek.y += SPEED
 
+def rysowanie_menu(button1,button2):
+    button_play_ = pygame.image.load(os.path.join('Dodatki', 'button_play.png'))
+    button_play = pygame.transform.scale(button_play_,(200,50))
+    button_highcscore = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki','HIGHSCORES.png')),(200,50))
+    ekran.blit(button_play, (button1.x, button1.y))
+    ekran.blit(button_highcscore,(button2.x,button2.y))
+
+def rysowanie_after_game(button1,button2,button3):
+    button_play_ = pygame.image.load(os.path.join('Dodatki', 'button_play.png'))
+    button_play = pygame.transform.scale(button_play_,(200,50))
+    ekran.blit(button_play, (button1.x, button1.y))
+    button_menu = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki','MENU.png')),(200,50))
+    ekran.blit(button_menu, (button2.x, button2.y))
+    button_quit = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki','QUIT.png')),(200,50))
+    ekran.blit(button_quit, (button3.x, button3.y))
+
+def rysowanie_highscores(button):
+    button_menu = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki','MENU.png')),(200,50))
+    ekran.blit(button_menu, (button.x, button.y))
+
 #draw our window and rectangle
 def rysowanie_ekr(tomek,jarek, ammu, jarek_health):
     ekran.blit(background, (0,0))
@@ -77,9 +105,12 @@ def rysowanie_ekr(tomek,jarek, ammu, jarek_health):
 
     pygame.display.update()
 
-def text_kocnowy(text):
+def text_kocnowy(text,text_1):
     czcionka_kocnowa = czcionka.render(text,1,kolor_czcionki)
-    ekran.blit(czcionka_kocnowa, (200,300))
+    czcionka_koncowa2 = czcionka.render(text_1,1,kolor_czcionki)
+    ekran.blit(czcionka_koncowa2, (200,300))
+    ekran.blit(czcionka_kocnowa, (550,300))
     pygame.display.update()
     pygame.time.delay(10000)
+
 
