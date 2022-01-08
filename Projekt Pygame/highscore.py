@@ -25,6 +25,7 @@ import random
 #     b = {1:23,2:20,3:10,4:8,5:4}
 #     assert highscore_sorting(23,a) == b
 
+
 highscores = [0,0,0,0,0]
 
 def bubble_sort(lista):
@@ -43,9 +44,28 @@ def bubble_sort(lista):
 #     b.sort()
 #     assert bubble_sort(lista) == b
 
-# def wyniki(higscores):
-#     higscoretxt = open("highscores.txt", "r")
-#     x = 1
-#     for i in higscoretxt:
-#         higscores[x] = int[i]
-#         x += 1
+def add_to_highscore(wynik, lista):
+    if wynik > lista[4]:
+        lista.pop(4)
+        lista.append(wynik)
+        bubble_sort(lista)
+        lista.reverse()
+        return lista
+    else:
+        return lista
+
+
+def wyniki(lista):
+    higscoretxt = open("highscores.txt", "r")
+    x = 0
+    for i in higscoretxt:
+        lista[x] = int(i)
+        x += 1
+wyniki(highscores)
+
+def update_file(lista):
+    plik = [str(lista[0]), '\n', str(lista[1]), '\n', str(lista[2]),
+            '\n', str(lista[3]), '\n', str(lista[4])]
+    highscoretxt = open("highscores.txt", 'w')
+    highscoretxt.writelines(plik)
+    highscoretxt.close()

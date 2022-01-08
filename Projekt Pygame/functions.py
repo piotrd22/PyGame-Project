@@ -1,6 +1,7 @@
 import pygame
 import os
 from random import randint
+from highscore import *
 
 pygame.init()
 
@@ -112,5 +113,6 @@ def text_kocnowy(text,text_1):
     ekran.blit(czcionka_kocnowa, (550,300))
     pygame.display.update()
     pygame.time.delay(10000)
+
 
 

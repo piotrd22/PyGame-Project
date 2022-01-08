@@ -1,5 +1,6 @@
 import time, datetime
 from functions import *
+from highscore import *
 
 pygame.init()
 
@@ -78,6 +79,19 @@ def highscore():
         high_score5 = czcionka.render("5:",1,kolor_czcionki)
         ekran.blit(high_score5,(200,400))
 
+
+        score1 = czcionka.render(f"{highscores[0]}", 1, kolor_czcionki)
+        score2 = czcionka.render(f"{highscores[1]}", 1, kolor_czcionki)
+        score3 = czcionka.render(f"{highscores[2]}", 1, kolor_czcionki)
+        score4 = czcionka.render(f"{highscores[3]}", 1, kolor_czcionki)
+        score5 = czcionka.render(f"{highscores[4]}", 1, kolor_czcionki)
+
+        ekran.blit(score1, (300, 200))
+        ekran.blit(score2, (300, 250))
+        ekran.blit(score3, (300, 300))
+        ekran.blit(score4, (300, 350))
+        ekran.blit(score5, (300, 400))
+
         menu_guzik = pygame.Rect(300,500,200,50)
         mousex, mousey = pygame.mouse.get_pos()
 
@@ -115,9 +129,6 @@ def after_game():
     while b:
 
         ekran.blit(background2, (0, 0))
-        menu_text = czcionka.render("MENU",1, kolor_czcionki)
-        ekran.blit(menu_text,(360,100))
-
 
         mousex, mousey = pygame.mouse.get_pos()
 
@@ -128,6 +139,7 @@ def after_game():
 
         if menu_guzik.collidepoint((mousex,mousey)):
             if klikniecie:
+
                 menu()
 
         if menu_guzik2.collidepoint((mousex,mousey)):
@@ -177,6 +189,7 @@ def main():
 
     zegar = pygame.time.Clock()
 
+    # highscores = [0, 0, 0, 0, 0]
 
     #main loop
     a = True
@@ -201,12 +214,17 @@ def main():
         if datetime.datetime.utcnow() > timer_stop:
             text = str(jarek_health)
             text_1 = "Brawo! Twoja ilość punktów to: "
+            koniec = jarek_health
 
         if text != "":
             text_kocnowy(text,text_1)
+            add_to_highscore(koniec, highscores)
+            update_file(highscores)
             after_game()
 
+
         rysowanie_ekr(tomek,jarek,ammmu, jarek_health)
+
 
         #JERRY MOVEMENT (when it was a func it didnt work so yeah...)
         if jarek.left <= 20 or jarek.right >= 780:
