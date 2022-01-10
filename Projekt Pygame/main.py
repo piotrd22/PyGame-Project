@@ -1,4 +1,7 @@
 import time, datetime
+
+import pygame
+
 from functions import *
 from highscore import *
 
@@ -57,34 +60,34 @@ def menu():
 
 def highscore():
 
-    background2 = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki', 'Background2.png')), (800, 600))
+    background2 = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki', 'Background3.png')), (800, 600))
     button_menu = pygame.Rect(300, 500, 200, 50)
+    button_highscores = pygame.Rect(300,100,200,50)
+
     klikniecie = False
 
     c = True
     while c:
 
         ekran.blit(background2, (0, 0))
-        menu_text = czcionka.render("HIGHSCORES",1, kolor_czcionki)
-        ekran.blit(menu_text,(320,100))
 
-        high_score1 = czcionka.render("1:",1,kolor_czcionki)
+        high_score1 = czcionka.render("1:",1,kolor_czcionki2)
         ekran.blit(high_score1,(200,200))
-        high_score2 = czcionka.render("2:",1,kolor_czcionki)
+        high_score2 = czcionka.render("2:",1,kolor_czcionki2)
         ekran.blit(high_score2,(200,250))
-        high_score3 = czcionka.render("3:",1,kolor_czcionki)
+        high_score3 = czcionka.render("3:",1,kolor_czcionki2)
         ekran.blit(high_score3,(200,300))
-        high_score4 = czcionka.render("4:",1,kolor_czcionki)
+        high_score4 = czcionka.render("4:",1,kolor_czcionki2)
         ekran.blit(high_score4,(200,350))
-        high_score5 = czcionka.render("5:",1,kolor_czcionki)
+        high_score5 = czcionka.render("5:",1,kolor_czcionki2)
         ekran.blit(high_score5,(200,400))
 
 
-        score1 = czcionka.render(f"{highscores[0]}", 1, kolor_czcionki)
-        score2 = czcionka.render(f"{highscores[1]}", 1, kolor_czcionki)
-        score3 = czcionka.render(f"{highscores[2]}", 1, kolor_czcionki)
-        score4 = czcionka.render(f"{highscores[3]}", 1, kolor_czcionki)
-        score5 = czcionka.render(f"{highscores[4]}", 1, kolor_czcionki)
+        score1 = czcionka.render(f"{highscores[0]}", 1, kolor_czcionki2)
+        score2 = czcionka.render(f"{highscores[1]}", 1, kolor_czcionki2)
+        score3 = czcionka.render(f"{highscores[2]}", 1, kolor_czcionki2)
+        score4 = czcionka.render(f"{highscores[3]}", 1, kolor_czcionki2)
+        score5 = czcionka.render(f"{highscores[4]}", 1, kolor_czcionki2)
 
         ekran.blit(score1, (300, 200))
         ekran.blit(score2, (300, 250))
@@ -111,7 +114,7 @@ def highscore():
                 if event.button == 1:
                     klikniecie = True
 
-        rysowanie_highscores(button_menu)
+        rysowanie_highscores(button_menu, button_highscores)
 
         pygame.display.update()
 
@@ -173,14 +176,12 @@ def after_game():
 #main loop
 def main():
 
-    timer_stop = datetime.datetime.utcnow() + datetime.timedelta(seconds=20)
-
     text=""
     jarek_health = 0
 
     ammmu = []
 
-    direction=1
+    kierunek = 1
     speed_x = 2
     speed_y = 1
 
@@ -188,8 +189,9 @@ def main():
     jarek = pygame.Rect(100,100,50,50)
 
     zegar = pygame.time.Clock()
-
-    # highscores = [0, 0, 0, 0, 0]
+    czas = 20
+    timer = pygame.USEREVENT + 1
+    pygame.time.set_timer(timer,1000)
 
     #main loop
     a = True
@@ -205,13 +207,20 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and len(ammmu) < ammu_number:
-                    shot = pygame.Rect(tomek.x + tomek.width, tomek.y + tomek.height - 33, 8, 4)
+                    shot = pygame.Rect(tomek.x + tomek.width + 20, tomek.y + tomek.height - 10, 8, 4)
                     ammmu.append(shot)
 
             if event.type == hits:
                 jarek_health += 1
 
-        if datetime.datetime.utcnow() > timer_stop:
+            if event.type == hits and jarek_health % 5 == 0 and jarek_health > 5:
+                czas += 3
+
+
+            if event.type == timer and czas > 0:
+                czas -= 1
+
+        if czas == 0:
             text = str(jarek_health)
             text_1 = "Brawo! Twoja ilość punktów to: "
             koniec = jarek_health
@@ -223,27 +232,27 @@ def main():
             after_game()
 
 
-        rysowanie_ekr(tomek,jarek,ammmu, jarek_health)
+        rysowanie_ekr(tomek,jarek,ammmu, jarek_health, czas)
 
 
         #JERRY MOVEMENT (when it was a func it didnt work so yeah...)
         if jarek.left <= 20 or jarek.right >= 780:
-            direction *= -1
-            speed_x = randint(1, 8) * direction
-            speed_y = randint(1, 8) * direction
+            kierunek *= -1
+            speed_x = randint(1, 8) * kierunek
+            speed_y = randint(1, 8) * kierunek
 
         if speed_x == 0 and speed_y == 0:
-            speed_x = randint(2, 8) * direction
-            speed_y = randint(2, 8) * direction
+            speed_x = randint(2, 8) * kierunek
+            speed_y = randint(2, 8) * kierunek
 
         if jarek.top <= 20 or jarek.bottom >= 580:
-            direction *= -1
-            speed_x = randint(1, 8) * direction
-            speed_y = randint(1, 8) * direction
+            kierunek *= -1
+            speed_x = randint(1, 8) * kierunek
+            speed_y = randint(1, 8) * kierunek
 
         if speed_x == 0 and speed_y == 0:
-            speed_x = randint(2, 8) * direction
-            speed_y = randint(2, 8) * direction
+            speed_x = randint(2, 8) * kierunek
+            speed_y = randint(2, 8) * kierunek
 
         jarek.left += speed_x
         jarek.top += speed_y
