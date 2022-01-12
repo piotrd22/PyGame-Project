@@ -185,8 +185,8 @@ def main():
     speed_x = 2
     speed_y = 1
 
-    tomek = pygame.Rect(100,300,50,50)
-    jarek = pygame.Rect(100,100,50,50)
+    tomek = pygame.Rect(100,300,90,90)
+    jarek = pygame.Rect(100,100,90,90)
 
     zegar = pygame.time.Clock()
     czas = 20
@@ -207,7 +207,7 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and len(ammmu) < ammu_number:
-                    shot = pygame.Rect(tomek.x + tomek.width + 20, tomek.y + tomek.height - 10, 8, 4)
+                    shot = pygame.Rect(tomek.x + tomek.width + 20, tomek.y + tomek.height - 50, 8, 4)
                     ammmu.append(shot)
 
             if event.type == hits:
@@ -217,10 +217,10 @@ def main():
                 czas += 3
 
 
-            if event.type == timer and czas > 0:
+            if event.type == timer and czas > -1:
                 czas -= 1
 
-        if czas == 0:
+        if czas == -1:
             text = str(jarek_health)
             text_1 = "Brawo! Twoja ilość punktów to: "
             koniec = jarek_health

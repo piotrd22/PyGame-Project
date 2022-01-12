@@ -20,7 +20,7 @@ ammu_number = 4
 ammu_color = (255,255,255)
 hits = pygame.USEREVENT #it represents custom user event
 
-jerry_size = (50,50)
+jerry_size = (90,90)
 tom_size = (90,90)
 
 TOM = pygame.image.load(os.path.join('Dodatki','Tom.png'))
