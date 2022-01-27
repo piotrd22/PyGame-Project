@@ -1,36 +1,19 @@
 import random
+from date import *
 
-# Zrezygnowalem ze slownika w bazie danych, ale moglbym zamienic moja liste na ten slownik,
-# ale zostawilem kod, bo moze zaliczy sie to do kategorii slownik w wymaganiach...
+highscore = {1:0,2:0,3:0,4:0,5:0}
+def dic_to_list(dic):
+    highscor = []
+    for i in dic:
+        highscor.append(dic[i])
+    return highscor
+dic_to_list(highscore)
+highscores = dic_to_list(highscore)
 
-# highscores = {1:0,2:0,3:0,4:0,5:0}
-
-#
-# def highscore_sorting(wynik, highscore):
-#     if highscore[1] <= wynik:
-#         index = len(highscore)
-#         while index >= 2:
-#             highscore[index] = highscore[index-1]
-#             index -= 1
-#         highscore[1] = wynik
-#         return highscore
-#     for i in range(1,len(highscore)+1):
-#         if highscore[i] < wynik:
-#             index = len(highscore)
-#             while i <= index:
-#                 highscore[index] = highscore[index-1]
-#                 index -= 1
-#             highscore[i] = wynik
-#             return highscore
-#
-# def test_higscore_sorting():
-#     a = {1:20,2:10,3:8,4:4,5:1}
-#     b = {1:23,2:20,3:10,4:8,5:4}
-#     assert highscore_sorting(23,a) == b
-
-
-highscores = [0,0,0,0,0]
-
+# def test_dic_to_list():
+#     dic = {1:111,2:'alek',3:'haha',4:1}
+#     lista = [111,'alek','haha',1]
+#     assert lista == dic_to_list(dic)
 
 def length(lista):
     dlugosc = 0
@@ -82,6 +65,9 @@ def add_to_highscore(wynik, lista):
         lista.append(wynik)
         bubble_sort(lista)
         reverse(lista)
+        a = index(wynik,lista)
+        dates.insert(a,str(today))
+        dates.pop(5)
         return lista
     else:
         return lista

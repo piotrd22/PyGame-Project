@@ -12,6 +12,7 @@ screen_color = (255,255,255)
 
 czcionka2 = pygame.font.SysFont('helvetica',15)
 czcionka = pygame.font.SysFont('helvetica', 30)
+czcionka3 = pygame.font.SysFont('helvetica',20)
 kolor_czcionki = (255,255,255)
 kolor_czcionki2 = (255,0,0)
 
@@ -68,10 +69,12 @@ def TOM_movement(tomek):
     if klucz[pygame.K_DOWN] and tomek.y + SPEED + 90 < 600:
         tomek.y += SPEED
 
-def rysowanie_menu(button1,button2):
+def rysowanie_menu(button1,button2,button3):
     button_play_ = pygame.image.load(os.path.join('Dodatki', 'button_play.png'))
     button_play = pygame.transform.scale(button_play_,(200,50))
     button_highcscore = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki','HIGHSCORES.png')),(200,50))
+    button_rules = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki','Rules.png')),(200,50))
+    ekran.blit(button_rules, (button3.x,button3.y))
     ekran.blit(button_play, (button1.x, button1.y))
     ekran.blit(button_highcscore,(button2.x,button2.y))
 
@@ -89,6 +92,13 @@ def rysowanie_highscores(button,button2):
     ekran.blit(button_menu, (button.x, button.y))
     button_highscores = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki','HIGHSCORES.png')),(200,50))
     ekran.blit(button_highscores, (button2.x, button2.y))
+
+def rysowanie_rules(button,button2):
+    button_menu = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki','Menu.png')),(200,50))
+    ekran.blit(button_menu, (button.x, button.y))
+    button_rules = pygame.transform.scale(pygame.image.load(os.path.join('Dodatki','Rules.png')),(200,50))
+    ekran.blit(button_rules, (button2.x, button2.y))
+
 
 #draw our window and rectangle
 def rysowanie_ekr(tomek,jarek, ammu, jarek_health, timer1):
